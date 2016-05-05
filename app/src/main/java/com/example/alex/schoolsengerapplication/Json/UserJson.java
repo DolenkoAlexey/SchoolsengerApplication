@@ -2,10 +2,11 @@ package com.example.alex.schoolsengerapplication.Json;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 
-public class UserJson {
+public class UserJson implements Serializable{
 
     @SerializedName("id")
     private int id;
