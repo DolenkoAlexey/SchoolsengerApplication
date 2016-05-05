@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">SchoolsengerApplication</string>
+    <string name="loginText">Войти</string>
+    <string name="registrationText">Зарегистрироваться</string>
+    <string name="enterEmailText">Введите адрес электроной почты:</string>
+    <string name="EnterPasswordText">Введите пароль:</string>
+    <string name="EnterPasswordAgainText">Введите пароль еще раз:</string>
+    <string name="schoolkidText">Ученик</string>
+    <string name="EnterUsernameText">Введите имя пользователя</string>
+    <string-array name="teacherSchoolkid">
+        <item>Ученик</item>
+        <item>Учитель</item>
+    </string-array>
+</resources>
