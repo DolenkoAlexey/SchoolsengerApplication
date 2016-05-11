@@ -1,10 +1,10 @@
 package com.example.alex.schoolsengerapplication;
 
-import com.example.alex.schoolsengerapplication.Json.ResponseJson;
-import com.example.alex.schoolsengerapplication.Json.UserJson;
+import com.example.alex.schoolsengerapplication.json.UserJson;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.ResponseBody;
 
+import org.json.JSONObject;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -70,12 +70,12 @@ public class ExampleUnitTest {
                 .addConverterFactory(factory)
                 .build();
 
-        Requester requester = retrofit.create(Requester.class);
-        Call<ResponseJson> call = requester.sendUserToServer(user);
+        RequesterAPI requesterAPI = retrofit.create(RequesterAPI.class);
+        Call<JSONObject> call = requesterAPI.sendUserToServer(user);
 
-        call.enqueue(new Callback<ResponseJson>() {
+        call.enqueue(new Callback<JSONObject>() {
             @Override
-            public void onResponse(Response<ResponseJson> response) {
+            public void onResponse(Response<JSONObject> response) {
                 System.out.println("qwe");
             }
 

@@ -1,4 +1,4 @@
-package com.example.alex.schoolsengerapplication.Activities;
+package com.example.alex.schoolsengerapplication.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,7 +16,7 @@ public class BeginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_begin);
 
         loginButton = (Button) findViewById(R.id.loginButton);
         registrationButton = (Button) findViewById(R.id.registrationButton);

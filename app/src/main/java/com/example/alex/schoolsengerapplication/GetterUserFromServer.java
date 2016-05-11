@@ -1,13 +1,6 @@
 package com.example.alex.schoolsengerapplication;
 
-import com.example.alex.schoolsengerapplication.Json.UserJson;
-
-import java.io.IOException;
-
-import retrofit.Call;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
+import com.example.alex.schoolsengerapplication.json.UserJson;
 
 /**
  * Created by Alex on 05.05.2016.
@@ -15,23 +8,26 @@ import retrofit.Retrofit;
 public class GetterUserFromServer {
 
     public UserJson getUserFromServerSync(String email) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://schoolsenger.herokuapp.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+//        RequesterAPI requesterAPI = RequesterAPI.Creator.getRequester();
+//
+//        Call<UserJson> call = requesterAPI.getIsUniqueEmailFromServer(email);
+//
+//        Response<UserJson> response = null;
+//        try {
+//            response = call.execute();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        assert response != null;
+//        return response.body();
 
-        Requester requester = retrofit.create(Requester.class);
-        Call<UserJson> call = requester.getIsUniqueEmailFromServer(email);
-
-        Response<UserJson> response = null;
         try {
-            response = call.execute();
-        } catch (IOException e) {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        assert response != null;
-        return response.body();
+        return new UserJson();
     }
 
 }

@@ -1,7 +1,6 @@
-package com.example.alex.schoolsengerapplication.Activities;
+package com.example.alex.schoolsengerapplication.activities;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,14 +8,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.alex.schoolsengerapplication.GetterUserFromServer;
-import com.example.alex.schoolsengerapplication.Json.UserJson;
 import com.example.alex.schoolsengerapplication.R;
+import com.example.alex.schoolsengerapplication.UIElements.RegistrationUIElement;
+import com.example.alex.schoolsengerapplication.presenters.RegistrationActivityPresenter;
 
-import java.io.Serializable;
-import java.util.concurrent.ExecutionException;
-
-public class RegistrationActivity extends AppCompatActivity {
+public class RegistrationActivity extends AppCompatActivity implements RegistrationUIElement{
 
     EditText emailEditText;
     EditText passwordEditText;
@@ -25,22 +21,26 @@ public class RegistrationActivity extends AppCompatActivity {
     Button enterButton;
     Button cancelButton;
 
-    UserJson user;
+    String email;
+    String password;
+    String passwordAgain;
+
+    RegistrationActivityPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
+        presenter = RegistrationActivityPresenter.getPresenter();
+        presenter.attachView(this);
+
         initUI();
-        user = new UserJson();
 
         enterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = emailEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
-                String passwordAgain = passwordAgainEditText.getText().toString();
+                initUsersParams();
 
                 if(!password.equals(passwordAgain)){
                     Toast.makeText(RegistrationActivity.this,
@@ -50,11 +50,40 @@ public class RegistrationActivity extends AppCompatActivity {
                     return;
                 }
 
-                user.setPassword(password);
-
-                new RegistratorAsync(email).execute();
+                presenter.runAsync(email);
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.detatch();
+    }
+
+    @Override
+    public void setCorrectUserDataAsyncResult(){
+        Intent intent = new Intent(this, ContinuedRegistrationActivity.class);
+        intent.putExtra("email", email);
+        intent.putExtra("pass", password);
+
+        startActivity(intent);
+    }
+
+    @Override
+    public void setWrongUserDataAsyncResult(){
+        Toast.makeText(this, "Такой e-mail уже занят. Попробуйте еще раз", Toast.LENGTH_SHORT).show();
+        setEmailEditTextEmpty();
+    }
+
+    private void setEmailEditTextEmpty(){
+        emailEditText.setText("");
+    }
+
+    private void initUsersParams() {
+        email = emailEditText.getText().toString();
+        password = passwordEditText.getText().toString();
+        passwordAgain = passwordAgainEditText.getText().toString();
     }
 
     private void initUI() {
@@ -70,49 +99,5 @@ public class RegistrationActivity extends AppCompatActivity {
         emailEditText.setText("");
         passwordEditText.setText("");
         passwordAgainEditText.setText("");
-    }
-
-
-    private class RegistratorAsync extends AsyncTask<Void, String, UserJson> {
-        private String email;
-
-        public RegistratorAsync(String email) {
-            this.email = email;
-        }
-        @Override
-        protected UserJson doInBackground(Void... params) {
-            GetterUserFromServer getter = new GetterUserFromServer();
-            return getter.getUserFromServerSync(email);
-        }
-
-        @Override
-        protected void onPostExecute(UserJson userJson) {
-            super.onPostExecute(userJson);
-
-            try {
-                if(!isUniqueEmail(userJson)) {
-                    Toast.makeText(RegistrationActivity.this,
-                            "Такой e-mail уже занят. Попробуйте еще раз",
-                            Toast.LENGTH_SHORT).show();
-                    emailEditText.setText("");
-                    return;
-                }
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            user.setEmail(email);
-
-            Intent intent = new Intent(RegistrationActivity.this, ContinuedRegistrationActivity.class);
-            intent.putExtra("user", (Serializable) user);
-            startActivity(intent);
-        }
-
-        private boolean isUniqueEmail(UserJson userJson) throws ExecutionException, InterruptedException {
-            // Если с сервера получен пустой объект,
-            // значит выборка по запрашиваемому email была пуста,
-            // значит этот email уникальен и его можно использовать
-            return userJson.getEmail() == null;
-        }
     }
 }

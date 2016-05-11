@@ -1,4 +1,4 @@
-package com.example.alex.schoolsengerapplication.Activities;
+package com.example.alex.schoolsengerapplication.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,16 +10,15 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.alex.schoolsengerapplication.Json.ResponseJson;
-import com.example.alex.schoolsengerapplication.Json.UserJson;
+import com.example.alex.schoolsengerapplication.json.UserJson;
 import com.example.alex.schoolsengerapplication.R;
-import com.example.alex.schoolsengerapplication.Requester;
+import com.example.alex.schoolsengerapplication.RequesterAPI;
+
+import org.json.JSONObject;
 
 import retrofit.Call;
 import retrofit.Callback;
-import retrofit.GsonConverterFactory;
 import retrofit.Response;
-import retrofit.Retrofit;
 
 public class ContinuedRegistrationActivity extends AppCompatActivity {
 
@@ -34,6 +33,15 @@ public class ContinuedRegistrationActivity extends AppCompatActivity {
     RadioButton schoolkidRadioButton;
     RadioButton teacherRadioButton;
 
+    UserJson user;
+
+    String email;
+    String pass;
+    String lastname;
+    String firstname;
+    String username;
+    String character;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,56 +49,37 @@ public class ContinuedRegistrationActivity extends AppCompatActivity {
 
         initUI();
 
-        final UserJson user = (UserJson) getIntent().getSerializableExtra("user");
-
         enterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            String lastname = lastnameEditText.getText().toString();
-            String firstname = firstnameEditText.getText().toString();
-            String username = usernameEditText.getText().toString();
+                initUserCharacteristics();
 
-            String character = null;
+                RequesterAPI requesterAPI = RequesterAPI.Creator.getRequester();
+                Call<JSONObject> call = requesterAPI.sendUserToServer(user);
 
-            switch (radioGroup.getCheckedRadioButtonId())
-            {
-                case R.id.schoolkidRadioButton:
-                    character = "schoolkid";
-                    break;
-                case R.id.teacherRadioButton:
-                    character = "teacher";
-                    break;
+                call.enqueue(new Callback<JSONObject>() {
+                    @Override
+                    public void onResponse(Response<JSONObject> response) {
+                        Toast.makeText(ContinuedRegistrationActivity.this,
+                                "Регистрация прошла успешно.",
+                                Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(ContinuedRegistrationActivity.this, BeginActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                         throw new RuntimeException(t);
+                    }
+                });
             }
+        });
 
-            user.setLastname(lastname);
-            user.setFirstname(firstname);
-            user.setUsername(username);
-            user.setCharacter(character);
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://schoolsenger.herokuapp.com/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            Requester requester = retrofit.create(Requester.class);
-            Call<ResponseJson> call = requester.sendUserToServer(user);
-
-            call.enqueue(new Callback<ResponseJson>() {
-                @Override
-                public void onResponse(Response<ResponseJson> response) {
-                    Toast.makeText(ContinuedRegistrationActivity.this,
-                            "Регистрация прошла успешно.",
-                            Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(ContinuedRegistrationActivity.this, BeginActivity.class);
-                    startActivity(intent);
-                }
-
-                @Override
-                public void onFailure(Throwable t) {
-                    throw new RuntimeException(t);
-                }
-            });
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
@@ -106,5 +95,23 @@ public class ContinuedRegistrationActivity extends AppCompatActivity {
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         schoolkidRadioButton = (RadioButton) findViewById(R.id.schoolkidRadioButton);
         teacherRadioButton = (RadioButton) findViewById(R.id.teacherRadioButton);
+    }
+    private void initUserCharacteristics(){
+        lastname = lastnameEditText.getText().toString();
+        firstname = firstnameEditText.getText().toString();
+        username = usernameEditText.getText().toString();
+        email = getIntent().getStringExtra("email");
+        pass = getIntent().getStringExtra("pass");
+
+        switch (radioGroup.getCheckedRadioButtonId())
+        {
+            case R.id.schoolkidRadioButton:
+                character = "schoolkid";
+                break;
+            case R.id.teacherRadioButton:
+                character = "teacher";
+                break;
+        }
+        user = new UserJson(email, username, pass, firstname, lastname, character);
     }
 }

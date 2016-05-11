@@ -1,9 +1,10 @@
-package com.example.alex.schoolsengerapplication.Json;
+package com.example.alex.schoolsengerapplication.json;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class UserJson implements Serializable{
@@ -26,6 +27,9 @@ public class UserJson implements Serializable{
 
     @SerializedName("character")
     private String character;
+
+    @SerializedName("interlocutors")
+    private List<Integer> interlocutors;
 
     public UserJson(){ }
 
@@ -75,6 +79,8 @@ public class UserJson implements Serializable{
         return email;
     }
 
+    public List<Integer> getInterlocutors(){ return interlocutors; }
+
     public void setId(int id){
         this.id = id;
     }
@@ -101,5 +107,9 @@ public class UserJson implements Serializable{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setInterlocutors(List<Integer> interlocutors) {
+        this.interlocutors = interlocutors;
     }
 }

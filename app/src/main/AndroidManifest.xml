@@ -10,17 +10,17 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.BeginActivity">
+        <activity android:name=".activities.BeginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.RegistrationActivity" />
-        <activity android:name=".Activities.ContinuedRegistrationActivity" />
-        <activity android:name=".Activities.AuthenticationActivity" />
-        <activity android:name=".Activities.MainAppActivity"></activity>
+        <activity android:name=".activities.RegistrationActivity" />
+        <activity android:name=".activities.ContinuedRegistrationActivity" />
+        <activity android:name=".activities.AuthenticationActivity" />
+        <activity android:name=".activities.MainAppActivity"></activity>
     </application>
 
 </manifest>

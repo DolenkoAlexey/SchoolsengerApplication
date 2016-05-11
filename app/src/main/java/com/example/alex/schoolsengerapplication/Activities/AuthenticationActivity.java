@@ -1,7 +1,6 @@
-package com.example.alex.schoolsengerapplication.Activities;
+package com.example.alex.schoolsengerapplication.activities;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,9 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.alex.schoolsengerapplication.GetterUserFromServer;
-import com.example.alex.schoolsengerapplication.Json.UserJson;
 import com.example.alex.schoolsengerapplication.R;
+import com.example.alex.schoolsengerapplication.json.UserJson;
+import com.example.alex.schoolsengerapplication.presenters.AuthenticationActivityPresenter;
 
 public class AuthenticationActivity extends AppCompatActivity {
 
@@ -21,10 +20,14 @@ public class AuthenticationActivity extends AppCompatActivity {
     Button enterButton;
     Button cancelButton;
 
+    AuthenticationActivityPresenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
+
+        AuthenticationActivityPresenter.attachView(this);
 
         initUI();
 
@@ -34,7 +37,8 @@ public class AuthenticationActivity extends AppCompatActivity {
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
 
-                new LoginnerAsync(email, password).execute();
+                presenter = new AuthenticationActivityPresenter(email, password);
+                presenter.runAsync();
             }
         });
 
@@ -44,6 +48,12 @@ public class AuthenticationActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AuthenticationActivityPresenter.detatch();
     }
 
     private void initUI() {
@@ -59,36 +69,14 @@ public class AuthenticationActivity extends AppCompatActivity {
         passwordEditText.setText("");
     }
 
-    private class LoginnerAsync extends AsyncTask<Void, String, UserJson> {
-        private String email;
-        private String pass;
+    public void setWrongUserDataAsyncResult(){
+        Toast.makeText(this, "Такой e-mail уже занят. Попробуйте еще раз", Toast.LENGTH_SHORT).show();
+        setEditTextsEmpty();
+    }
 
-        public LoginnerAsync(String email, String pass) {
-            this.email = email;
-            this.pass = pass;
-        }
-        @Override
-        protected UserJson doInBackground(Void... params) {
-            GetterUserFromServer getter = new GetterUserFromServer();
-            return getter.getUserFromServerSync(email);
-        }
-
-        @Override
-        protected void onPostExecute(UserJson userJson) {
-            super.onPostExecute(userJson);
-
-            if((userJson.getEmail() == null) || (!userJson.getPassword().equals(pass))){
-                Toast.makeText(AuthenticationActivity.this,
-                        "Не верно введен E-mail или пароль. Попробуйте еще раз",
-                        Toast.LENGTH_SHORT).show();
-                setEditTextsEmpty();
-                return;
-            }
-
-            Intent intent = new Intent(AuthenticationActivity.this, MainAppActivity.class);
-
-            startActivity(intent);
-
-        }
+    public void setCorrectUserDataAsyncResult(UserJson userJson){
+        Intent intent = new Intent(this, MainAppActivity.class);
+        intent.putExtra("user", userJson);
+        startActivity(intent);
     }
 }
