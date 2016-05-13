@@ -1,8 +1,8 @@
 package com.example.alex.schoolsengerapplication.presenters;
 
+import com.example.alex.schoolsengerapplication.AsyncModels.AuthenticationAsync;
 import com.example.alex.schoolsengerapplication.activities.AuthenticationActivity;
-import com.example.alex.schoolsengerapplication.AsyncModels.AuthenticationActivityAsync;
-import com.example.alex.schoolsengerapplication.json.UserJson;
+import com.example.alex.schoolsengerapplication.models.User;
 
 /**
  * Created by Alex on 10.05.2016.
@@ -10,7 +10,7 @@ import com.example.alex.schoolsengerapplication.json.UserJson;
 public class AuthenticationActivityPresenter {
 
     static AuthenticationActivity currentActivity;
-    static AuthenticationActivityAsync loginner;
+    static AuthenticationAsync loginner;
 
     String email;
     String pass;
@@ -21,7 +21,7 @@ public class AuthenticationActivityPresenter {
     }
 
     public void runAsync(){
-        loginner = new AuthenticationActivityAsync(email, pass, this);
+        loginner = new AuthenticationAsync(email, pass, this);
         loginner.execute();
     }
 
@@ -34,14 +34,14 @@ public class AuthenticationActivityPresenter {
     }
 
     public void setWrongUserDataAsyncResult(){
-        if(currentActivity!= null) {
+        if(currentActivity != null) {
             currentActivity.setWrongUserDataAsyncResult();
         }
     }
 
-    public void setCorrectUserDataAsyncResult(UserJson userJson){
+    public void setCorrectUserDataAsyncResult(User user){
         if(currentActivity!= null) {
-            currentActivity.setCorrectUserDataAsyncResult(userJson);
+            currentActivity.setCorrectUserDataAsyncResult(user);
         }
     }
 }

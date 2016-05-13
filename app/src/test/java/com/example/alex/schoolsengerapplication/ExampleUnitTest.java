@@ -71,7 +71,7 @@ public class ExampleUnitTest {
                 .build();
 
         RequesterAPI requesterAPI = retrofit.create(RequesterAPI.class);
-        Call<JSONObject> call = requesterAPI.sendUserToServer(user);
+        Call<JSONObject> call = requesterAPI.sendSchoolkidToServer(user);
 
         call.enqueue(new Callback<JSONObject>() {
             @Override
@@ -85,12 +85,5 @@ public class ExampleUnitTest {
             }
         });
         Thread.sleep(100000);
-
-
-//        BufferedSink sink = new Buffer();
-//        requestBody.writeTo(sink);
-//        ByteArrayOutputStream outputStream = (ByteArrayOutputStream) sink.outputStream();
-//        String res = new String(outputStream.toByteArray());
-//        System.out.println(res);
     }
 }

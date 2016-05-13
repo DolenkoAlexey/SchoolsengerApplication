@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.alex.schoolsengerapplication.R;
@@ -20,6 +22,10 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
 
     Button enterButton;
     Button cancelButton;
+
+    RadioGroup radioGroup;
+    RadioButton schoolkidRadioButton;
+    RadioButton teacherRadioButton;
 
     String email;
     String password;
@@ -40,17 +46,17 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         enterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initUsersParams();
+            initUsersParams();
 
-                if(!password.equals(passwordAgain)){
-                    Toast.makeText(RegistrationActivity.this,
-                            "Пароли не совпадают. Попробуйте еще раз",
-                            Toast.LENGTH_SHORT).show();
-                    setEditTextsEmpty();
-                    return;
-                }
+            if(!password.equals(passwordAgain)){
+                Toast.makeText(RegistrationActivity.this,
+                        "Пароли не совпадают. Попробуйте еще раз",
+                        Toast.LENGTH_SHORT).show();
+                setEditTextsEmpty();
+                return;
+            }
 
-                presenter.runAsync(email);
+            presenter.runAsync(email);
             }
         });
     }
@@ -63,10 +69,17 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
 
     @Override
     public void setCorrectUserDataAsyncResult(){
-        Intent intent = new Intent(this, ContinuedRegistrationActivity.class);
+        Intent intent = null;
+        switch (radioGroup.getCheckedRadioButtonId()) {
+            case (R.id.schoolkidRadioButton):
+                intent = new Intent(this, ContinuedRegistrationForSchoolkidActivity.class);
+                break;
+            case(R.id.teacherRadioButton):
+                intent = new Intent(this, ContinuedRegistrationForTeacherActivity.class);
+        }
+        assert intent != null;
         intent.putExtra("email", email);
         intent.putExtra("pass", password);
-
         startActivity(intent);
     }
 
@@ -93,6 +106,10 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
 
         enterButton = (Button) findViewById(R.id.enterButton);
         cancelButton= (Button) findViewById(R.id.cancelButton);
+
+        radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        schoolkidRadioButton = (RadioButton) findViewById(R.id.schoolkidRadioButton);
+        teacherRadioButton = (RadioButton) findViewById(R.id.teacherRadioButton);
     }
 
     private void setEditTextsEmpty() {

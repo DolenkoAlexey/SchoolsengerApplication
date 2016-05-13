@@ -1,6 +1,8 @@
 package com.example.alex.schoolsengerapplication;
 
-import com.example.alex.schoolsengerapplication.json.UserJson;
+import com.example.alex.schoolsengerapplication.json.SchoolkidJson;
+import com.example.alex.schoolsengerapplication.json.TeacherJson;
+import com.example.alex.schoolsengerapplication.json.UsersMapJson;
 
 import org.json.JSONObject;
 
@@ -17,16 +19,19 @@ import retrofit.http.Query;
 
 public interface RequesterAPI {
 
-    @GET("authorization/getuser")
-    Call<UserJson> getIsUniqueEmailFromServer(@Query("email") String email);
-
+    @GET("authorization/user")
+    Call<UsersMapJson> getIsUniqueEmailFromServer(@Query("email") String email);
 
     @Headers("Content-type: application/json")
-    @POST("authorization/adduser")
-    Call<JSONObject> sendUserToServer(@Body UserJson user);
+    @POST("authorization/schoolkid")
+    Call<JSONObject> sendSchoolkidToServer(@Body SchoolkidJson schoolkid);
+
+    @Headers("Content-type: application/json")
+    @POST("authorization/teacher")
+    Call<JSONObject> sendTeacherToServer(@Body TeacherJson teacher);
 
 
-    @GET("session/getinterlocutors")
+    @GET("session/interlocutors")
     Call<List<Integer>> getInterlocutorsFromServer(@Query("id") Integer id);
 
     class Creator {
@@ -42,7 +47,6 @@ public interface RequesterAPI {
                 requesterAPI = retrofit.create(RequesterAPI.class);
             }
             return requesterAPI;
-
         }
     }
 }

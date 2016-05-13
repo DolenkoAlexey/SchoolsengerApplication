@@ -18,9 +18,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.RegistrationActivity" />
-        <activity android:name=".activities.ContinuedRegistrationActivity" />
+        <activity android:name=".activities.ContinuedRegistrationForSchoolkidActivity" />
         <activity android:name=".activities.AuthenticationActivity" />
-        <activity android:name=".activities.MainAppActivity"></activity>
+        <activity android:name=".activities.MainAppActivity" />
+        <activity android:name=".activities.ContinuedRegistrationForTeacherActivity"></activity>
     </application>
 
 </manifest>

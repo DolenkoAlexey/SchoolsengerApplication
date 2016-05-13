@@ -3,8 +3,6 @@ package com.example.alex.schoolsengerapplication.json;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
 
 
 public class UserJson implements Serializable{
@@ -25,38 +23,18 @@ public class UserJson implements Serializable{
     @SerializedName("lastname")
     private String lastname;
 
-    @SerializedName("character")
-    private String character;
-
-    @SerializedName("interlocutors")
-    private List<Integer> interlocutors;
-
     public UserJson(){ }
 
-    public UserJson(HashMap<String, String> user){
-        setEmail(user.get("email"));
-        setUsername(user.get("username"));
-        setPassword(user.get("password"));
-        setFirstname(user.get("firstname"));
-        setLastname(user.get("lastname"));
-        setCharacter(user.get("character"));
-    }
-
-    public UserJson(String email, String username, String password, String firstname, String lastname, String character){
+    public UserJson(int id, String email, String username, String password, String firstname, String lastname){
         setEmail(email);
         setUsername(username);
         setPassword(password);
         setFirstname(firstname);
         setLastname(lastname);
-        setCharacter(character);
     }
 
     public int getId(){
         return id;
-    }
-
-    public String getCharacter() {
-        return character;
     }
 
     public String getLastname() {
@@ -79,14 +57,8 @@ public class UserJson implements Serializable{
         return email;
     }
 
-    public List<Integer> getInterlocutors(){ return interlocutors; }
-
     public void setId(int id){
         this.id = id;
-    }
-
-    public void setCharacter(String character) {
-        this.character = character;
     }
 
     public void setLastname(String lastname) {
@@ -107,9 +79,5 @@ public class UserJson implements Serializable{
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setInterlocutors(List<Integer> interlocutors) {
-        this.interlocutors = interlocutors;
     }
 }

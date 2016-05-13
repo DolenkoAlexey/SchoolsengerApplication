@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.alex.schoolsengerapplication.R;
-import com.example.alex.schoolsengerapplication.json.UserJson;
+import com.example.alex.schoolsengerapplication.models.User;
 import com.example.alex.schoolsengerapplication.presenters.AuthenticationActivityPresenter;
 
 public class AuthenticationActivity extends AppCompatActivity {
@@ -70,13 +70,13 @@ public class AuthenticationActivity extends AppCompatActivity {
     }
 
     public void setWrongUserDataAsyncResult(){
-        Toast.makeText(this, "Такой e-mail уже занят. Попробуйте еще раз", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Неправильный e-mail или пароль, попробуйте еще раз", Toast.LENGTH_SHORT).show();
         setEditTextsEmpty();
     }
 
-    public void setCorrectUserDataAsyncResult(UserJson userJson){
+    public void setCorrectUserDataAsyncResult(User user){
         Intent intent = new Intent(this, MainAppActivity.class);
-        intent.putExtra("user", userJson);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
 }

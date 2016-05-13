@@ -3,7 +3,7 @@ package com.example.alex.schoolsengerapplication.AsyncModels;
 import android.os.AsyncTask;
 
 import com.example.alex.schoolsengerapplication.GetterUserFromServer;
-import com.example.alex.schoolsengerapplication.json.UserJson;
+import com.example.alex.schoolsengerapplication.models.User;
 import com.example.alex.schoolsengerapplication.presenters.RegistrationActivityPresenter;
 
 import java.util.concurrent.ExecutionException;
@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * Created by Alex on 10.05.2016.
  */
-public class RegistrationAsync extends AsyncTask<Void, String, UserJson> {
+public class RegistrationAsync extends AsyncTask<Void, String, User> {
     private String email;
     private RegistrationActivityPresenter presenter;
 
@@ -21,17 +21,17 @@ public class RegistrationAsync extends AsyncTask<Void, String, UserJson> {
     }
 
     @Override
-    protected UserJson doInBackground(Void... params) {
+    protected User doInBackground(Void... params) {
         GetterUserFromServer getter = new GetterUserFromServer();
         return getter.getUserFromServerSync(email);
     }
 
     @Override
-    protected void onPostExecute(UserJson userJson) {
-        super.onPostExecute(userJson);
+    protected void onPostExecute(User user) {
+        super.onPostExecute(user);
 
         try {
-            if(!isUniqueEmail(userJson)) {
+            if(!isUniqueEmail(user)) {
                 presenter.setWrongUserDataAsyncResult();
                 return;
             }
@@ -42,10 +42,10 @@ public class RegistrationAsync extends AsyncTask<Void, String, UserJson> {
         presenter.setCorrectUserDataAsyncResult();
     }
 
-    private boolean isUniqueEmail(UserJson userJson) throws ExecutionException, InterruptedException {
+    private boolean isUniqueEmail(User user) throws ExecutionException, InterruptedException {
         // Если с сервера получен пустой объект,
         // значит выборка по запрашиваемому email была пуста,
         // значит этот email уникальен и его можно использовать
-        return userJson.getEmail() == null;
+        return user.getEmail() == null;
     }
 }

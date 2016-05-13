@@ -53,6 +53,38 @@
         android:id="@+id/passwordAgainEditText" />
 
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Вы:"
+        android:id="@+id/textView12"
+        android:layout_below="@+id/usernameSchoolkidEditText"
+        android:layout_alignParentStart="true" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/textView7"
+        android:id="@+id/radioGroup"
+        android:layout_below="@+id/usernameSchoolkidEditText" >
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ученик"
+            android:id="@+id/schoolkidRadioButton"
+            android:checked="true" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Учитель"
+            android:checked="false"
+            android:id="@+id/teacherRadioButton" />
+    </RadioGroup>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
