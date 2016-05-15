@@ -9,6 +9,7 @@ public abstract class BasePresenter <T extends UIElement>{
     protected T currentActivity;
 
     abstract public void attachView(T _currentActivity);
+
     public void detatch(){
         currentActivity = null;
     }

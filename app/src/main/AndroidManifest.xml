@@ -17,11 +17,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.RegistrationActivity" />
-        <activity android:name=".activities.ContinuedRegistrationForSchoolkidActivity" />
+        <activity android:name=".activities.registrationActivities.RegistrationActivity" />
+        <activity android:name=".activities.registrationActivities.ContinuedRegistrationForSchoolkidActivity" />
         <activity android:name=".activities.AuthenticationActivity" />
-        <activity android:name=".activities.MainAppActivity" />
-        <activity android:name=".activities.ContinuedRegistrationForTeacherActivity"></activity>
+        <activity android:name=".activities.sessionActivities.FriendListActivity" />
+        <activity android:name=".activities.registrationActivities.ContinuedRegistrationForTeacherActivity" />
+        <activity android:name=".activities.sessionActivities.DialogActivity"></activity>
     </application>
 
 </manifest>

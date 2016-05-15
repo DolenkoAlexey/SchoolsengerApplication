@@ -1,9 +1,9 @@
 package com.example.alex.schoolsengerapplication.parsers;
 
-import com.example.alex.schoolsengerapplication.json.SchoolkidJson;
-import com.example.alex.schoolsengerapplication.json.TeacherJson;
-import com.example.alex.schoolsengerapplication.models.Schoolkid;
-import com.example.alex.schoolsengerapplication.models.Teacher;
+import com.example.alex.schoolsengerapplication.json.usersJson.SchoolkidJson;
+import com.example.alex.schoolsengerapplication.json.usersJson.TeacherJson;
+import com.example.alex.schoolsengerapplication.models.users.Schoolkid;
+import com.example.alex.schoolsengerapplication.models.users.Teacher;
 
 /**
  * Created by Alex on 12.05.2016.

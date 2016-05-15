@@ -1,10 +1,10 @@
-package com.example.alex.schoolsengerapplication.AsyncModels;
+package com.example.alex.schoolsengerapplication.asyncModels;
 
 import android.os.AsyncTask;
 
-import com.example.alex.schoolsengerapplication.GetterUserFromServer;
-import com.example.alex.schoolsengerapplication.models.User;
-import com.example.alex.schoolsengerapplication.presenters.RegistrationActivityPresenter;
+import com.example.alex.schoolsengerapplication.api.GetterUserFromServer;
+import com.example.alex.schoolsengerapplication.models.users.User;
+import com.example.alex.schoolsengerapplication.presenters.RegistrationPresenter;
 
 import java.util.concurrent.ExecutionException;
 
@@ -13,9 +13,9 @@ import java.util.concurrent.ExecutionException;
  */
 public class RegistrationAsync extends AsyncTask<Void, String, User> {
     private String email;
-    private RegistrationActivityPresenter presenter;
+    private RegistrationPresenter presenter;
 
-    public RegistrationAsync(String email, RegistrationActivityPresenter presenter) {
+    public RegistrationAsync(String email, RegistrationPresenter presenter) {
         this.email = email;
         this.presenter = presenter;
     }

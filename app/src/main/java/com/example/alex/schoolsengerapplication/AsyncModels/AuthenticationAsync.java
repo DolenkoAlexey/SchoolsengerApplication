@@ -1,10 +1,10 @@
-package com.example.alex.schoolsengerapplication.AsyncModels;
+package com.example.alex.schoolsengerapplication.asyncModels;
 
 import android.os.AsyncTask;
 
-import com.example.alex.schoolsengerapplication.GetterUserFromServer;
-import com.example.alex.schoolsengerapplication.models.User;
-import com.example.alex.schoolsengerapplication.presenters.AuthenticationActivityPresenter;
+import com.example.alex.schoolsengerapplication.api.GetterUserFromServer;
+import com.example.alex.schoolsengerapplication.models.users.User;
+import com.example.alex.schoolsengerapplication.presenters.AuthenticationPresenter;
 
 /**
  * Created by Alex on 10.05.2016.
@@ -12,9 +12,9 @@ import com.example.alex.schoolsengerapplication.presenters.AuthenticationActivit
 public class AuthenticationAsync extends AsyncTask<Void, String, User> {
     private String email;
     private String pass;
-    private AuthenticationActivityPresenter presenter;
+    private AuthenticationPresenter presenter;
 
-    public AuthenticationAsync(String email, String pass, AuthenticationActivityPresenter presenter) {
+    public AuthenticationAsync(String email, String pass, AuthenticationPresenter presenter) {
         this.email = email;
         this.pass = pass;
         this.presenter = presenter;

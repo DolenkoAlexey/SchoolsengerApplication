@@ -9,10 +9,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.alex.schoolsengerapplication.R;
-import com.example.alex.schoolsengerapplication.models.User;
-import com.example.alex.schoolsengerapplication.presenters.AuthenticationActivityPresenter;
+import com.example.alex.schoolsengerapplication.UIElements.AuthenticationUIElement;
+import com.example.alex.schoolsengerapplication.activities.sessionActivities.FriendListActivity;
+import com.example.alex.schoolsengerapplication.models.users.User;
+import com.example.alex.schoolsengerapplication.presenters.AuthenticationPresenter;
 
-public class AuthenticationActivity extends AppCompatActivity {
+public class AuthenticationActivity extends AppCompatActivity implements AuthenticationUIElement{
 
     EditText emailEditText;
     EditText passwordEditText;
@@ -20,14 +22,15 @@ public class AuthenticationActivity extends AppCompatActivity {
     Button enterButton;
     Button cancelButton;
 
-    AuthenticationActivityPresenter presenter;
+    AuthenticationPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
 
-        AuthenticationActivityPresenter.attachView(this);
+        presenter = AuthenticationPresenter.getPresenter();
+        presenter.attachView(this);
 
         initUI();
 
@@ -37,8 +40,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
 
-                presenter = new AuthenticationActivityPresenter(email, password);
-                presenter.runAsync();
+                presenter.runAsync(email, password);
             }
         });
 
@@ -53,7 +55,7 @@ public class AuthenticationActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        AuthenticationActivityPresenter.detatch();
+        presenter.detatch();
     }
 
     private void initUI() {
@@ -69,14 +71,16 @@ public class AuthenticationActivity extends AppCompatActivity {
         passwordEditText.setText("");
     }
 
+    @Override
     public void setWrongUserDataAsyncResult(){
         Toast.makeText(this, "Неправильный e-mail или пароль, попробуйте еще раз", Toast.LENGTH_SHORT).show();
         setEditTextsEmpty();
     }
 
+    @Override
     public void setCorrectUserDataAsyncResult(User user){
-        Intent intent = new Intent(this, MainAppActivity.class);
-        intent.putExtra("user", user);
+        Intent intent = new Intent(this, FriendListActivity.class);
+        intent.putExtra("currentUser", user);
         startActivity(intent);
     }
 }
