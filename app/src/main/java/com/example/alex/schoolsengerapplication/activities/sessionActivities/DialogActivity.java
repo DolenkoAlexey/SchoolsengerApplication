@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.alex.schoolsengerapplication.R;
 import com.example.alex.schoolsengerapplication.UIElements.DialogUIElement;
+import com.example.alex.schoolsengerapplication.UIElements.MessageFromServerUIElement;
 import com.example.alex.schoolsengerapplication.adapter.DialogAdapter;
 import com.example.alex.schoolsengerapplication.api.RequesterAPI;
 import com.example.alex.schoolsengerapplication.models.message.Message;
@@ -26,8 +27,10 @@ import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
 
-public class DialogActivity extends AppCompatActivity implements DialogUIElement{
+public class DialogActivity extends AppCompatActivity implements DialogUIElement, MessageFromServerUIElement{
     private DialogPresenter presenter;
+    DialogAdapter dialogAdapter;
+
 
     private List<Message> messages;
 
@@ -74,9 +77,11 @@ public class DialogActivity extends AppCompatActivity implements DialogUIElement
                     @Override
                     public void onResponse(Response<JSONObject> response) {
                         Toast.makeText(DialogActivity.this,
-                                "Отправлено!",
-                                Toast.LENGTH_SHORT).show();
+                                "Отправлено!",Toast.LENGTH_SHORT).show();
+
                         messages.add(message);
+                        dialogAdapter.notifyDataSetChanged();
+                        messageEditText.setText("");
                     }
 
                     @Override
@@ -94,6 +99,8 @@ public class DialogActivity extends AppCompatActivity implements DialogUIElement
         sendButton = (Button) findViewById(R.id.sendButton);
         messageEditText = (EditText) findViewById(R.id.messageEditText);
         messageListView = (ListView) findViewById(R.id.messageListView);
+
+
     }
 
     @Override
@@ -104,9 +111,20 @@ public class DialogActivity extends AppCompatActivity implements DialogUIElement
 
     @Override
     public void setMessages(MessagesList messagesList) {
-
         messages = messagesList.getMessages();
-        messageListView.setAdapter(new DialogAdapter(messages, idCurrentUser, this));
+        dialogAdapter = new DialogAdapter(messages, idCurrentUser, DialogActivity.this);
+        messageListView.setAdapter(dialogAdapter);
         messageListView.setClickable(false);
+    }
+
+    @Override
+    public void setMessageFromInterlocutor(final String message){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                messages.add(new Message(idCurrentUser, idSecondUser, message));
+                dialogAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }

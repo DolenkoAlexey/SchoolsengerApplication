@@ -8,4 +8,5 @@ import com.example.alex.schoolsengerapplication.models.message.MessagesList;
 public interface DialogUIElement extends UIElement {
 
     void setMessages(MessagesList messagesList);
+    void setMessageFromInterlocutor(String message);
 }

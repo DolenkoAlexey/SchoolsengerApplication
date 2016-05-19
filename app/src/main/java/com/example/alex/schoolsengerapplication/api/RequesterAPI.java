@@ -1,5 +1,6 @@
 package com.example.alex.schoolsengerapplication.api;
 
+import com.example.alex.schoolsengerapplication.json.TokenJson;
 import com.example.alex.schoolsengerapplication.json.messageJson.MessageJson;
 import com.example.alex.schoolsengerapplication.json.messageJson.MessagesListJson;
 import com.example.alex.schoolsengerapplication.json.usersDataJson.UsersDataMapJson;
@@ -41,6 +42,13 @@ public interface RequesterAPI {
     @Headers("Content-type: application/json")
     @POST("session/message")
     Call<JSONObject> sendMessageToServer(@Body MessageJson message);
+
+    @Headers("Content-type: application/json")
+    @POST("session/refreshtoken")
+    Call<JSONObject> refreshToken(@Body TokenJson tokenJson);
+
+    @GET("session/token")
+    Call<TokenJson> getTokenFromServerByEmail(@Query("emailUser") String emailUser);
 
     class Creator {
         static RequesterAPI requesterAPI;

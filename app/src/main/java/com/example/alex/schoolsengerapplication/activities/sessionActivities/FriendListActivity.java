@@ -6,24 +6,38 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.alex.schoolsengerapplication.R;
 import com.example.alex.schoolsengerapplication.UIElements.FriendListUIElement;
+import com.example.alex.schoolsengerapplication.UIElements.TokenUIElement;
 import com.example.alex.schoolsengerapplication.adapter.FriendListAdapter;
+import com.example.alex.schoolsengerapplication.api.RequesterAPI;
+import com.example.alex.schoolsengerapplication.json.TokenJson;
 import com.example.alex.schoolsengerapplication.json.usersDataJson.UsersDataMapJson;
 import com.example.alex.schoolsengerapplication.models.users.User;
 import com.example.alex.schoolsengerapplication.models.usersData.UsersData;
 import com.example.alex.schoolsengerapplication.models.usersData.UsersDataMap;
 import com.example.alex.schoolsengerapplication.parsers.UsersDataJsonParser;
 import com.example.alex.schoolsengerapplication.presenters.InterlocutorsPresenter;
+import com.example.alex.schoolsengerapplication.presenters.TokenPresenter;
+import com.google.android.gms.iid.InstanceID;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FriendListActivity extends AppCompatActivity implements FriendListUIElement{
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
+
+public class FriendListActivity extends AppCompatActivity implements FriendListUIElement, TokenUIElement{
     ListView friendsListView;
 
-    InterlocutorsPresenter presenter;
+    InterlocutorsPresenter interlocutorsPresenter;
+    TokenPresenter tokenPresenter;
+    String token;
 
     User currentUser;
     private List<UsersData> interlocutorsData;
@@ -38,13 +52,20 @@ public class FriendListActivity extends AppCompatActivity implements FriendListU
         currentUser = (User) getIntent().getSerializableExtra("currentUser");
 
         getInterlocutors();
+        getToken();
+    }
+
+    private void getToken() {
+        tokenPresenter = TokenPresenter.getPresenter();
+        tokenPresenter.attachView(this);
+        tokenPresenter.runAsync(InstanceID.getInstance(this));
     }
 
     private void getInterlocutors() {
-        presenter = InterlocutorsPresenter.getPresenter();
-        presenter.attachView(this);
+        interlocutorsPresenter = InterlocutorsPresenter.getPresenter();
+        interlocutorsPresenter.attachView(this);
 
-        presenter.runAsync(currentUser.getId());
+        interlocutorsPresenter.runAsync(currentUser.getId());
     }
 
     private void initUI(){
@@ -54,7 +75,8 @@ public class FriendListActivity extends AppCompatActivity implements FriendListU
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        presenter.detatch();
+        interlocutorsPresenter.detatch();
+        tokenPresenter.detatch();
     }
 
     @Override
@@ -86,5 +108,56 @@ public class FriendListActivity extends AppCompatActivity implements FriendListU
         interlocutorsData.addAll(usersDataMap.getSchoolkidsData());
         interlocutorsData.addAll(usersDataMap.getTeachersData());
         interlocutorsData.addAll(usersDataMap.getSuperadminsData());
+    }
+
+    @Override
+    public void setToken(String token) {
+        this.token = token;
+
+        checkIsEqualsTokensOnServerAndClient();
+    }
+
+
+    private void checkIsEqualsTokensOnServerAndClient(){
+        RequesterAPI requesterAPI = RequesterAPI.Creator.getRequester();
+        TokenJson tokenJson = new TokenJson(currentUser.getEmail(), token);
+        Call<TokenJson> call = requesterAPI.getTokenFromServerByEmail(tokenJson.getEmailUser());
+
+        call.enqueue(new Callback<TokenJson>() {
+            @Override
+            public void onResponse(Response<TokenJson> response) {
+                if((response.body() == null) || (!response.body().getToken().equals(token))) {
+                    refreshToken();//Если токены, полученный с GSM сервера и хранящийся
+                                   // на PUSH сервере не совпадают, то обновляем серверный токен на новый
+                                   // такое бывает, если приложение переустанавливается
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                throw new RuntimeException(t);
+            }
+        });
+    }
+
+    private void refreshToken() {
+        RequesterAPI requesterAPI = RequesterAPI.Creator.getRequester();
+
+        TokenJson tokenJson = new TokenJson(currentUser.getEmail(), token);
+        Call<JSONObject> call = requesterAPI.refreshToken(tokenJson);
+
+        call.enqueue(new Callback<JSONObject>() {
+            @Override
+            public void onResponse(Response<JSONObject> response) {
+                Toast.makeText(FriendListActivity.this,
+                        "Токен обновлен!",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                throw new RuntimeException(t);
+            }
+        });
     }
 }

@@ -19,7 +19,6 @@ public class DialogPresenter extends BasePresenter<DialogUIElement> {
         return presenter;
     }
 
-
     @Override
     public void attachView(DialogUIElement _currentActivity) {
         currentActivity = _currentActivity;
@@ -34,5 +33,9 @@ public class DialogPresenter extends BasePresenter<DialogUIElement> {
         if(currentActivity != null){
             currentActivity.setMessages(messagesList);
         }
+    }
+
+    public void setMessageFromInterlocutor(String message) {
+        currentActivity.setMessageFromInterlocutor(message);
     }
 }
