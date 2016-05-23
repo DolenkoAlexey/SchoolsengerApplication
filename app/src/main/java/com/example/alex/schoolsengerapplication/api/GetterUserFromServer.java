@@ -43,10 +43,10 @@ public class GetterUserFromServer {
             user = parser.ParseUserFromJson(schoolkidJsons.get(0));
         }
         else if(!teacherJsons.isEmpty()){
-            user = parser.ParseUserFromJson(schoolkidJsons.get(0));
+            user = parser.ParseUserFromJson(teacherJsons.get(0));
         }
         else if (!superadminJsons.isEmpty()){
-            user = parser.ParseUserFromJson(schoolkidJsons.get(0));
+            user = parser.ParseUserFromJson(superadminJsons.get(0));
         }
         else {
             user = new User(); //// TODO: 15.05.2016 КОСТЫЛЬ!
@@ -54,5 +54,4 @@ public class GetterUserFromServer {
 
         return user;
     }
-
 }

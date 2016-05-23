@@ -69,6 +69,13 @@ public class DialogActivity extends AppCompatActivity implements DialogUIElement
                 MessageJsonParser parser = new MessageJsonParser();
 
                 String messageString = messageEditText.getText().toString();
+
+                if(messageString.equals("")){
+                    Toast.makeText(DialogActivity.this,
+                        "Введите сообщение!",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 final Message message = new Message(idCurrentUser, idSecondUser, messageString);
 
                 Call<JSONObject> call = requesterAPI.sendMessageToServer(parser.parseMessageToJson(message));

@@ -2,13 +2,14 @@ package com.example.alex.schoolsengerapplication.json.usersDataJson;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by Alex on 13.05.2016.
  */
-public class UsersDataMapJson {
+public class UsersDataMapJson implements Serializable {
 
     @SerializedName("schoolkidsDatas")
     private List<SchoolkidsDataJson> schoolkidsDataJsons;

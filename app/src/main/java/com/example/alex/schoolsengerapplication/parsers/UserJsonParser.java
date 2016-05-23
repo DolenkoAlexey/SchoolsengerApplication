@@ -1,8 +1,10 @@
 package com.example.alex.schoolsengerapplication.parsers;
 
 import com.example.alex.schoolsengerapplication.json.usersJson.SchoolkidJson;
+import com.example.alex.schoolsengerapplication.json.usersJson.SuperadminJson;
 import com.example.alex.schoolsengerapplication.json.usersJson.TeacherJson;
 import com.example.alex.schoolsengerapplication.models.users.Schoolkid;
+import com.example.alex.schoolsengerapplication.models.users.Superadmin;
 import com.example.alex.schoolsengerapplication.models.users.Teacher;
 
 /**
@@ -23,6 +25,13 @@ public class UserJsonParser {
         Teacher teacher = new Teacher(teacherJson.getId(), teacherJson.getEmail(), teacherJson.getUsername(),
                 teacherJson.getPassword(), teacherJson.getFirstname(), teacherJson.getLastname());
         return teacher;
+    }
+
+    public Superadmin ParseUserFromJson(SuperadminJson superadminJson){
+
+        Superadmin superadmin = new Superadmin(superadminJson.getId(), superadminJson.getEmail(), superadminJson.getUsername(),
+                superadminJson.getPassword(), superadminJson.getFirstname(), superadminJson.getLastname());
+        return superadmin;
     }
 
     public SchoolkidJson ParseUserToJson(Schoolkid schoolkid){

@@ -50,6 +50,9 @@ public interface RequesterAPI {
     @GET("session/token")
     Call<TokenJson> getTokenFromServerByEmail(@Query("emailUser") String emailUser);
 
+    @GET("session/byusername")
+    Call<UsersDataMapJson> getUsersDataByUsernameFromServer(@Query("username") String username);
+
     class Creator {
         static RequesterAPI requesterAPI;
 

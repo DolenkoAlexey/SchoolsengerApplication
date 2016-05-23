@@ -1,13 +1,13 @@
 package com.example.alex.schoolsengerapplication.presenters;
 
 import com.example.alex.schoolsengerapplication.asyncModels.InterlocutorsAsync;
-import com.example.alex.schoolsengerapplication.UIElements.FriendListUIElement;
+import com.example.alex.schoolsengerapplication.UIElements.SessionUIElement;
 import com.example.alex.schoolsengerapplication.json.usersDataJson.UsersDataMapJson;
 
 /**
  * Created by Alex on 13.05.2016.
  */
-public class InterlocutorsPresenter extends BasePresenter<FriendListUIElement> {
+public class InterlocutorsPresenter extends BasePresenter<SessionUIElement> {
     static private InterlocutorsPresenter presenter;
 
     private InterlocutorsPresenter(){
@@ -20,7 +20,7 @@ public class InterlocutorsPresenter extends BasePresenter<FriendListUIElement> {
     }
 
     @Override
-    public void attachView(FriendListUIElement _currentActivity) {
+    public void attachView(SessionUIElement _currentActivity) {
         currentActivity = _currentActivity;
     }
 

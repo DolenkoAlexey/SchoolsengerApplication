@@ -2,10 +2,12 @@ package com.example.alex.schoolsengerapplication.json.usersDataJson;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by Alex on 13.05.2016.
  */
-public class UsersDataJson {
+public class UsersDataJson implements Serializable {
     @SerializedName("id")
     private int id;
 

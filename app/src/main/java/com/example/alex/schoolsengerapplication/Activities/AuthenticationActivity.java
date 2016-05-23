@@ -10,9 +10,15 @@ import android.widget.Toast;
 
 import com.example.alex.schoolsengerapplication.R;
 import com.example.alex.schoolsengerapplication.UIElements.AuthenticationUIElement;
-import com.example.alex.schoolsengerapplication.activities.sessionActivities.FriendListActivity;
+import com.example.alex.schoolsengerapplication.activities.sessionActivities.SchoolkidSessionActivity;
+import com.example.alex.schoolsengerapplication.activities.sessionActivities.TeacherSessionActivity;
+import com.example.alex.schoolsengerapplication.models.users.Schoolkid;
+import com.example.alex.schoolsengerapplication.models.users.Superadmin;
+import com.example.alex.schoolsengerapplication.models.users.Teacher;
 import com.example.alex.schoolsengerapplication.models.users.User;
 import com.example.alex.schoolsengerapplication.presenters.AuthenticationPresenter;
+
+import java.util.concurrent.ExecutionException;
 
 public class AuthenticationActivity extends AppCompatActivity implements AuthenticationUIElement{
 
@@ -79,7 +85,24 @@ public class AuthenticationActivity extends AppCompatActivity implements Authent
 
     @Override
     public void setCorrectUserDataAsyncResult(User user){
-        Intent intent = new Intent(this, FriendListActivity.class);
+        Intent intent;
+
+        if(user instanceof Schoolkid) {
+            intent = new Intent(this, SchoolkidSessionActivity.class);
+        }
+
+        else if(user instanceof Teacher){
+            intent = new Intent(this, TeacherSessionActivity.class);
+        }
+
+        else if(user instanceof Superadmin){
+            intent = new Intent(this, Superadmin.class);
+        }
+
+        else{
+            throw new RuntimeException("WRONG USER");
+        }
+
         intent.putExtra("currentUser", user);
         startActivity(intent);
     }

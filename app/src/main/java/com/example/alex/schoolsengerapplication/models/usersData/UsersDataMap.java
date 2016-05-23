@@ -11,6 +11,8 @@ public class UsersDataMap {
     private List<TeachersData> teachersData;
     private List<SuperadminsData> superadminsData;
 
+    public UsersDataMap(){}
+
     public UsersDataMap(Map<Class, List<? extends UsersData>> usersData) {
         schoolkidsData = (List<SchoolkidsData>)usersData.get(SchoolkidsData.class);
         teachersData = (List<TeachersData>)usersData.get(TeachersData.class);
