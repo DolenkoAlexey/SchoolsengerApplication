@@ -45,9 +45,11 @@ public class SearchResultActivity extends AppCompatActivity{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(SearchResultActivity.this, DialogActivity.class);
 
-                Integer idFirstUser = ((User)getIntent().getSerializableExtra("currentUser")).getId();
+                Integer idCurrentUser = ((User)getIntent().getSerializableExtra("currentUser")).getId();
                 Integer idSecondUser = foundUsersData.get(position).getId();
 
+                intent.putExtra("idCurrentUser", idCurrentUser);
+                intent.putExtra("idSecondUser", idSecondUser);
                 startActivity(intent);
             }
         });

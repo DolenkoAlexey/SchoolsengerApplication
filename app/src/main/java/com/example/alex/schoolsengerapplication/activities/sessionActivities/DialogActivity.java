@@ -14,6 +14,7 @@ import com.example.alex.schoolsengerapplication.UIElements.DialogUIElement;
 import com.example.alex.schoolsengerapplication.UIElements.MessageFromServerUIElement;
 import com.example.alex.schoolsengerapplication.adapter.DialogAdapter;
 import com.example.alex.schoolsengerapplication.api.RequesterAPI;
+import com.example.alex.schoolsengerapplication.json.messageJson.MessageJson;
 import com.example.alex.schoolsengerapplication.models.message.Message;
 import com.example.alex.schoolsengerapplication.models.message.MessagesList;
 import com.example.alex.schoolsengerapplication.parsers.MessageJsonParser;
@@ -49,8 +50,8 @@ public class DialogActivity extends AppCompatActivity implements DialogUIElement
         setContentView(R.layout.activity_dialog);
         initUI();
 
-        idCurrentUser = getIntent().getIntExtra("idCurrentUser", 0);
-        idSecondUser = getIntent().getIntExtra("idSecondUser", 0);
+        idCurrentUser = getIntent().getIntExtra("idCurrentUser", -1);
+        idSecondUser = getIntent().getIntExtra("idSecondUser", -1);
 
         presenter = DialogPresenter.getPresenter();
         presenter.attachView(this);
@@ -77,8 +78,8 @@ public class DialogActivity extends AppCompatActivity implements DialogUIElement
                 }
 
                 final Message message = new Message(idCurrentUser, idSecondUser, messageString);
-
-                Call<JSONObject> call = requesterAPI.sendMessageToServer(parser.parseMessageToJson(message));
+                MessageJson messageJson = parser.parseMessageToJson(message);
+                Call<JSONObject> call = requesterAPI.sendMessageToServer(messageJson);
 
                 call.enqueue(new Callback<JSONObject>() {
                     @Override
